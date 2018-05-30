@@ -17,6 +17,8 @@ export function getUserId(ctx: Context) {
   throw new AuthError()
 }
 
+export const createToken = (userId: String) => jwt.sign({ userId, expiresIn: '7d' }, process.env.APP_SECRET);
+
 export class AuthError extends Error {
   constructor() {
     super('Not authorized')
