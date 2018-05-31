@@ -4,7 +4,6 @@ import { Context, createToken, getUserId } from '../../utils'
 
 export const auth = {
   async refreshToken(parent, args, ctx: Context, info) {
-    console.log('ctx: ', ctx);
     const userId = getUserId(ctx);
     return createToken(userId);
   },

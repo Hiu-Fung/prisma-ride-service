@@ -1,5 +1,7 @@
 # import Post from "./generated/prisma.graphql"
 
+scalar Upload
+
 type Query {
   feed: [Post!]!
   drafts: [Post!]!
@@ -11,6 +13,7 @@ type Mutation {
   refreshToken: String!
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  createProduct(name: String!, price: Float!, picture: Upload!): Product!
   createDraft(title: String!, text: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!

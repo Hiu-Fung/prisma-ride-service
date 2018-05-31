@@ -13,7 +13,8 @@
     "graphql": "^0.13.2",
     "graphql-yoga": "1.6.1",
     "jsonwebtoken": "8.2.0",
-    "prisma-binding": "1.5.16"
+    "prisma-binding": "1.5.16",
+    "shortid": "^2.2.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.1",

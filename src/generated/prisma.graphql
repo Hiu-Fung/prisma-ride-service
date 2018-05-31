@@ -20,6 +20,7 @@ type Product implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  price: Float!
   pictureUrl: String!
   seller(where: UserWhereInput): User!
 }
@@ -518,6 +519,7 @@ type ProductConnection {
 
 input ProductCreateInput {
   name: String!
+  price: Float!
   pictureUrl: String!
   seller: UserCreateOneWithoutProductsInput!
 }
@@ -529,6 +531,7 @@ input ProductCreateManyWithoutSellerInput {
 
 input ProductCreateWithoutSellerInput {
   name: String!
+  price: Float!
   pictureUrl: String!
 }
 
@@ -555,6 +558,8 @@ enum ProductOrderByInput {
   updatedAt_DESC
   name_ASC
   name_DESC
+  price_ASC
+  price_DESC
   pictureUrl_ASC
   pictureUrl_DESC
 }
@@ -564,6 +569,7 @@ type ProductPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  price: Float!
   pictureUrl: String!
 }
 
@@ -604,6 +610,7 @@ input ProductSubscriptionWhereInput {
 
 input ProductUpdateInput {
   name: String
+  price: Float
   pictureUrl: String
   seller: UserUpdateOneWithoutProductsInput
 }
@@ -619,6 +626,7 @@ input ProductUpdateManyWithoutSellerInput {
 
 input ProductUpdateWithoutSellerDataInput {
   name: String
+  price: Float
   pictureUrl: String
 }
 
@@ -806,6 +814,35 @@ input ProductWhereInput {
   All values not ending with the given string.
   """
   name_not_ends_with: String
+  price: Float
+  """
+  All values that are not equal to given value.
+  """
+  price_not: Float
+  """
+  All values that are contained in given list.
+  """
+  price_in: [Float!]
+  """
+  All values that are not contained in given list.
+  """
+  price_not_in: [Float!]
+  """
+  All values less than the given value.
+  """
+  price_lt: Float
+  """
+  All values less than or equal the given value.
+  """
+  price_lte: Float
+  """
+  All values greater than the given value.
+  """
+  price_gt: Float
+  """
+  All values greater than or equal the given value.
+  """
+  price_gte: Float
   pictureUrl: String
   """
   All values that are not equal to given value.

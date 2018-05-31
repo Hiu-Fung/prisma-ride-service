@@ -24,6 +24,7 @@ type Product implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  price: Float!
   pictureUrl: String!
   seller(where: UserWhereInput): User!
 }
@@ -522,6 +523,7 @@ type ProductConnection {
 
 input ProductCreateInput {
   name: String!
+  price: Float!
   pictureUrl: String!
   seller: UserCreateOneWithoutProductsInput!
 }
@@ -533,6 +535,7 @@ input ProductCreateManyWithoutSellerInput {
 
 input ProductCreateWithoutSellerInput {
   name: String!
+  price: Float!
   pictureUrl: String!
 }
 
@@ -559,6 +562,8 @@ enum ProductOrderByInput {
   updatedAt_DESC
   name_ASC
   name_DESC
+  price_ASC
+  price_DESC
   pictureUrl_ASC
   pictureUrl_DESC
 }
@@ -568,6 +573,7 @@ type ProductPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  price: Float!
   pictureUrl: String!
 }
 
@@ -608,6 +614,7 @@ input ProductSubscriptionWhereInput {
 
 input ProductUpdateInput {
   name: String
+  price: Float
   pictureUrl: String
   seller: UserUpdateOneWithoutProductsInput
 }
@@ -623,6 +630,7 @@ input ProductUpdateManyWithoutSellerInput {
 
 input ProductUpdateWithoutSellerDataInput {
   name: String
+  price: Float
   pictureUrl: String
 }
 
@@ -810,6 +818,35 @@ input ProductWhereInput {
   All values not ending with the given string.
   """
   name_not_ends_with: String
+  price: Float
+  """
+  All values that are not equal to given value.
+  """
+  price_not: Float
+  """
+  All values that are contained in given list.
+  """
+  price_in: [Float!]
+  """
+  All values that are not contained in given list.
+  """
+  price_not_in: [Float!]
+  """
+  All values less than the given value.
+  """
+  price_lt: Float
+  """
+  All values less than or equal the given value.
+  """
+  price_lte: Float
+  """
+  All values greater than the given value.
+  """
+  price_gt: Float
+  """
+  All values greater than or equal the given value.
+  """
+  price_gte: Float
   pictureUrl: String
   """
   All values that are not equal to given value.
@@ -1320,6 +1357,8 @@ export type ProductOrderByInput =
   'updatedAt_DESC' |
   'name_ASC' |
   'name_DESC' |
+  'price_ASC' |
+  'price_DESC' |
   'pictureUrl_ASC' |
   'pictureUrl_DESC'
 
@@ -1342,9 +1381,12 @@ export type MutationType =
   'UPDATED' |
   'DELETED'
 
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+export interface UserCreateInput {
+  email: String
+  password: String
+  name: String
+  posts?: PostCreateManyWithoutAuthorInput
+  products?: ProductCreateManyWithoutSellerInput
 }
 
 export interface PostWhereInput {
@@ -1413,9 +1455,11 @@ export interface PostWhereInput {
   author?: UserWhereInput
 }
 
-export interface UserCreateOneWithoutProductsInput {
-  create?: UserCreateWithoutProductsInput
-  connect?: UserWhereUniqueInput
+export interface ProductCreateInput {
+  name: String
+  price: Float
+  pictureUrl: String
+  seller: UserCreateOneWithoutProductsInput
 }
 
 export interface ProductWhereInput {
@@ -1465,6 +1509,14 @@ export interface ProductWhereInput {
   name_not_starts_with?: String
   name_ends_with?: String
   name_not_ends_with?: String
+  price?: Float
+  price_not?: Float
+  price_in?: Float[] | Float
+  price_not_in?: Float[] | Float
+  price_lt?: Float
+  price_lte?: Float
+  price_gt?: Float
+  price_gte?: Float
   pictureUrl?: String
   pictureUrl_not?: String
   pictureUrl_in?: String[] | String
@@ -1482,150 +1534,9 @@ export interface ProductWhereInput {
   seller?: UserWhereInput
 }
 
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput
-  create: UserCreateWithoutPostsInput
-}
-
-export interface ProductUpdateManyWithoutSellerInput {
-  create?: ProductCreateWithoutSellerInput[] | ProductCreateWithoutSellerInput
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  update?: ProductUpdateWithWhereUniqueWithoutSellerInput[] | ProductUpdateWithWhereUniqueWithoutSellerInput
-  upsert?: ProductUpsertWithWhereUniqueWithoutSellerInput[] | ProductUpsertWithWhereUniqueWithoutSellerInput
-}
-
-export interface ProductUpsertWithWhereUniqueWithoutSellerInput {
-  where: ProductWhereUniqueInput
-  update: ProductUpdateWithoutSellerDataInput
-  create: ProductCreateWithoutSellerInput
-}
-
-export interface UserCreateWithoutProductsInput {
-  email: String
-  password: String
-  name: String
-  posts?: PostCreateManyWithoutAuthorInput
-}
-
-export interface PostCreateInput {
-  isPublished?: Boolean
-  title: String
-  text: String
-  author: UserCreateOneWithoutPostsInput
-}
-
-export interface ProductSubscriptionWhereInput {
-  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ProductWhereInput
-}
-
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface PostSubscriptionWhereInput {
-  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
-  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: PostWhereInput
-}
-
-export interface UserCreateWithoutPostsInput {
-  email: String
-  password: String
-  name: String
-  products?: ProductCreateManyWithoutSellerInput
-}
-
-export interface PostWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ProductCreateManyWithoutSellerInput {
-  create?: ProductCreateWithoutSellerInput[] | ProductCreateWithoutSellerInput
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-}
-
-export interface ProductWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ProductCreateWithoutSellerInput {
-  name: String
-  pictureUrl: String
-}
-
-export interface UserUpdateOneWithoutProductsInput {
+export interface UserCreateOneWithoutProductsInput {
   create?: UserCreateWithoutProductsInput
   connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutProductsDataInput
-  upsert?: UserUpsertWithoutProductsInput
-}
-
-export interface UserCreateInput {
-  email: String
-  password: String
-  name: String
-  posts?: PostCreateManyWithoutAuthorInput
-  products?: ProductCreateManyWithoutSellerInput
-}
-
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput
-  update: PostUpdateWithoutAuthorDataInput
-  create: PostCreateWithoutAuthorInput
-}
-
-export interface ProductUpdateWithoutSellerDataInput {
-  name?: String
-  pictureUrl?: String
-}
-
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput
-  data: PostUpdateWithoutAuthorDataInput
-}
-
-export interface PostCreateWithoutAuthorInput {
-  isPublished?: Boolean
-  title: String
-  text: String
-}
-
-export interface UserUpdateInput {
-  email?: String
-  password?: String
-  name?: String
-  posts?: PostUpdateManyWithoutAuthorInput
-  products?: ProductUpdateManyWithoutSellerInput
-}
-
-export interface ProductCreateInput {
-  name: String
-  pictureUrl: String
-  seller: UserCreateOneWithoutProductsInput
-}
-
-export interface UserSubscriptionWhereInput {
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: UserWhereInput
 }
 
 export interface UserWhereInput {
@@ -1695,16 +1606,9 @@ export interface UserWhereInput {
   products_none?: ProductWhereInput
 }
 
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  email?: String
-  name?: String
-}
-
-export interface ProductUpdateInput {
-  name?: String
-  pictureUrl?: String
-  seller?: UserUpdateOneWithoutProductsInput
+export interface UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput
+  create: UserCreateWithoutPostsInput
 }
 
 export interface UserUpdateWithoutPostsDataInput {
@@ -1712,6 +1616,143 @@ export interface UserUpdateWithoutPostsDataInput {
   password?: String
   name?: String
   products?: ProductUpdateManyWithoutSellerInput
+}
+
+export interface ProductUpsertWithWhereUniqueWithoutSellerInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateWithoutSellerDataInput
+  create: ProductCreateWithoutSellerInput
+}
+
+export interface UserCreateWithoutProductsInput {
+  email: String
+  password: String
+  name: String
+  posts?: PostCreateManyWithoutAuthorInput
+}
+
+export interface PostCreateInput {
+  isPublished?: Boolean
+  title: String
+  text: String
+  author: UserCreateOneWithoutPostsInput
+}
+
+export interface UserSubscriptionWhereInput {
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: UserWhereInput
+}
+
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface UserUpsertWithoutProductsInput {
+  update: UserUpdateWithoutProductsDataInput
+  create: UserCreateWithoutProductsInput
+}
+
+export interface UserCreateWithoutPostsInput {
+  email: String
+  password: String
+  name: String
+  products?: ProductCreateManyWithoutSellerInput
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  email?: String
+  name?: String
+}
+
+export interface ProductCreateManyWithoutSellerInput {
+  create?: ProductCreateWithoutSellerInput[] | ProductCreateWithoutSellerInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+}
+
+export interface UserUpdateWithoutProductsDataInput {
+  email?: String
+  password?: String
+  name?: String
+  posts?: PostUpdateManyWithoutAuthorInput
+}
+
+export interface ProductCreateWithoutSellerInput {
+  name: String
+  price: Float
+  pictureUrl: String
+}
+
+export interface ProductUpdateInput {
+  name?: String
+  price?: Float
+  pictureUrl?: String
+  seller?: UserUpdateOneWithoutProductsInput
+}
+
+export interface ProductUpdateWithoutSellerDataInput {
+  name?: String
+  price?: Float
+  pictureUrl?: String
+}
+
+export interface PostUpdateWithoutAuthorDataInput {
+  isPublished?: Boolean
+  title?: String
+  text?: String
+}
+
+export interface PostCreateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+}
+
+export interface PostUpdateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput
+  update?: PostUpdateWithWhereUniqueWithoutAuthorInput[] | PostUpdateWithWhereUniqueWithoutAuthorInput
+  upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput[] | PostUpsertWithWhereUniqueWithoutAuthorInput
+}
+
+export interface PostCreateWithoutAuthorInput {
+  isPublished?: Boolean
+  title: String
+  text: String
+}
+
+export interface ProductSubscriptionWhereInput {
+  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProductWhereInput
+}
+
+export interface ProductUpdateWithWhereUniqueWithoutSellerInput {
+  where: ProductWhereUniqueInput
+  data: ProductUpdateWithoutSellerDataInput
+}
+
+export interface PostWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserUpdateOneWithoutProductsInput {
+  create?: UserCreateWithoutProductsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutProductsDataInput
+  upsert?: UserUpsertWithoutProductsInput
 }
 
 export interface UserUpdateOneWithoutPostsInput {
@@ -1729,36 +1770,46 @@ export interface PostUpdateInput {
   author?: UserUpdateOneWithoutPostsInput
 }
 
-export interface ProductUpdateWithWhereUniqueWithoutSellerInput {
-  where: ProductWhereUniqueInput
-  data: ProductUpdateWithoutSellerDataInput
+export interface ProductUpdateManyWithoutSellerInput {
+  create?: ProductCreateWithoutSellerInput[] | ProductCreateWithoutSellerInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  update?: ProductUpdateWithWhereUniqueWithoutSellerInput[] | ProductUpdateWithWhereUniqueWithoutSellerInput
+  upsert?: ProductUpsertWithWhereUniqueWithoutSellerInput[] | ProductUpsertWithWhereUniqueWithoutSellerInput
 }
 
-export interface PostUpdateWithoutAuthorDataInput {
-  isPublished?: Boolean
-  title?: String
-  text?: String
+export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput
+  update: PostUpdateWithoutAuthorDataInput
+  create: PostCreateWithoutAuthorInput
 }
 
-export interface UserUpdateWithoutProductsDataInput {
+export interface ProductWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface PostSubscriptionWhereInput {
+  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
+  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: PostWhereInput
+}
+
+export interface UserUpdateInput {
   email?: String
   password?: String
   name?: String
   posts?: PostUpdateManyWithoutAuthorInput
+  products?: ProductUpdateManyWithoutSellerInput
 }
 
-export interface UserUpsertWithoutProductsInput {
-  update: UserUpdateWithoutProductsDataInput
-  create: UserCreateWithoutProductsInput
-}
-
-export interface PostUpdateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
-  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput
-  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput
-  update?: PostUpdateWithWhereUniqueWithoutAuthorInput[] | PostUpdateWithWhereUniqueWithoutAuthorInput
-  upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput[] | PostUpsertWithWhereUniqueWithoutAuthorInput
+export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput
+  data: PostUpdateWithoutAuthorDataInput
 }
 
 /*
@@ -1774,88 +1825,8 @@ export interface ProductPreviousValues {
   createdAt: DateTime
   updatedAt: DateTime
   name: String
+  price: Float
   pictureUrl: String
-}
-
-/*
- * Information about pagination in a connection.
-
- */
-export interface PageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor?: String
-  endCursor?: String
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType
-  node?: User
-  updatedFields?: String[]
-  previousValues?: UserPreviousValues
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface PostConnection {
-  pageInfo: PageInfo
-  edges: PostEdge[]
-  aggregate: AggregatePost
-}
-
-export interface Post extends Node {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  isPublished: Boolean
-  title: String
-  text: String
-  author: User
-}
-
-export interface ProductSubscriptionPayload {
-  mutation: MutationType
-  node?: Product
-  updatedFields?: String[]
-  previousValues?: ProductPreviousValues
-}
-
-/*
- * An edge in a connection.
-
- */
-export interface ProductEdge {
-  node: Product
-  cursor: String
-}
-
-export interface BatchPayload {
-  count: Long
-}
-
-export interface AggregateUser {
-  count: Int
-}
-
-export interface User extends Node {
-  id: ID_Output
-  email: String
-  password: String
-  name: String
-  posts?: Post[]
-  products?: Product[]
-}
-
-/*
- * A connection to a list of items.
-
- */
-export interface UserConnection {
-  pageInfo: PageInfo
-  edges: UserEdge[]
-  aggregate: AggregateUser
 }
 
 /*
@@ -1876,35 +1847,62 @@ export interface PostPreviousValues {
   text: String
 }
 
-export interface PostSubscriptionPayload {
-  mutation: MutationType
-  node?: Post
-  updatedFields?: String[]
-  previousValues?: PostPreviousValues
+/*
+ * Information about pagination in a connection.
+
+ */
+export interface PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor?: String
+  endCursor?: String
 }
 
-export interface UserPreviousValues {
-  id: ID_Output
-  email: String
-  password: String
-  name: String
-}
-
-export interface Product extends Node {
+export interface Post extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  name: String
-  pictureUrl: String
-  seller: User
+  isPublished: Boolean
+  title: String
+  text: String
+  author: User
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface PostConnection {
+  pageInfo: PageInfo
+  edges: PostEdge[]
+  aggregate: AggregatePost
 }
 
 export interface AggregateProduct {
   count: Int
 }
 
-export interface AggregatePost {
-  count: Int
+export interface User extends Node {
+  id: ID_Output
+  email: String
+  password: String
+  name: String
+  posts?: Post[]
+  products?: Product[]
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface ProductConnection {
+  pageInfo: PageInfo
+  edges: ProductEdge[]
+  aggregate: AggregateProduct
+}
+
+export interface BatchPayload {
+  count: Long
 }
 
 /*
@@ -1916,14 +1914,69 @@ export interface UserEdge {
   cursor: String
 }
 
+export interface AggregatePost {
+  count: Int
+}
+
+export interface PostSubscriptionPayload {
+  mutation: MutationType
+  node?: Post
+  updatedFields?: String[]
+  previousValues?: PostPreviousValues
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType
+  node?: User
+  updatedFields?: String[]
+  previousValues?: UserPreviousValues
+}
+
+export interface Product extends Node {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String
+  price: Float
+  pictureUrl: String
+  seller: User
+}
+
+export interface UserPreviousValues {
+  id: ID_Output
+  email: String
+  password: String
+  name: String
+}
+
+export interface ProductSubscriptionPayload {
+  mutation: MutationType
+  node?: Product
+  updatedFields?: String[]
+  previousValues?: ProductPreviousValues
+}
+
 /*
  * A connection to a list of items.
 
  */
-export interface ProductConnection {
+export interface UserConnection {
   pageInfo: PageInfo
-  edges: ProductEdge[]
-  aggregate: AggregateProduct
+  edges: UserEdge[]
+  aggregate: AggregateUser
+}
+
+export interface AggregateUser {
+  count: Int
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface ProductEdge {
+  node: Product
+  cursor: String
 }
 
 /*
@@ -1941,6 +1994,11 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 */
 export type ID_Input = string | number
 export type ID_Output = string
+
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+*/
+export type Float = number
 
 /*
 The `Long` scalar type represents non-fractional signed whole numeric values.
